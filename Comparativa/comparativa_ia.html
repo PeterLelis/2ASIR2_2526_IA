@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparativa IA: Torres Mac vs Windows</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-light: #555;
+            --mac-color: #95a5a6;
+            --win-color: #3498db;
+            --accent: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { margin: 0; color: #34495e; font-size: 2.5rem; }
+        .subtitle { color: #7f8c8d; margin-top: 5px; font-size: 1.1rem; }
+
+        /* --- SECCIÓN DE INTRODUCCIÓN Y PREGUNTAS --- */
+        .info-section {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        details {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 5px;
+            border-left: 5px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        details:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Colores bordes modelos */
+        details.model-qwen { border-left-color: #3b82f6; }
+        details.model-gemma { border-left-color: #f97316; }
+        details.model-olmocr { border-left-color: #10b981; }
+        details.model-granite { border-left-color: #8b5cf6; }
+        
+        /* Estilo especial para la sección de Preguntas */
+        details.questions-box {
+            border-left-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+
+        summary {
+            padding: 15px 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #2c3e50;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        summary:after {
+            content: '+';
+            color: #bdc3c7;
+            font-size: 1.5rem;
+            font-weight: 300;
+            transition: transform 0.2s;
+        }
+
+        details[open] summary:after {
+            content: '+';
+            transform: rotate(45deg);
+        }
+
+        .details-content {
+            padding: 0 20px 20px 20px;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            border-top: 1px solid #e0e0e0;
+            margin-top: 5px;
+            padding-top: 15px;
+        }
+
+        .details-content ul, .details-content ol { padding-left: 20px; margin: 10px 0; }
+        .details-content li { margin-bottom: 8px; }
+        .details-content strong { color: #34495e; }
+
+        /* Estilo para la lista de preguntas */
+        .question-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .question-item:last-child { border-bottom: none; }
+        .q-title { font-weight: bold; color: #c0392b; display: block; margin-bottom: 4px; }
+
+        /* --- CONTROLES (BOTONES) --- */
+        .metrics-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .metric-btn {
+            padding: 12px 25px;
+            border: none;
+            background: white;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .metric-btn:hover { transform: translateY(-2px); }
+
+        .metric-btn.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+        }
+
+        /* --- GRÁFICA --- */
+        .chart-container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            height: 500px;
+            position: relative;
+        }
+
+        .legend-custom {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+        .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; position: relative; top: 1px;}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Comparativa de Rendimiento IA</h1>
+        <p class="subtitle">Mac (M1/M2) vs Windows (NVIDIA)</p>
+    </header>
+
+    <section class="info-section">
+        
+        <details class="model-qwen">
+            <summary>Qwen3-4b (Alibaba Cloud)</summary>
+            <div class="details-content">
+                <p>Este modelo representa la evolución de la familia Qwen hacia la eficiencia extrema combinada con capacidades de razonamiento profundo ("Thinking").</p>
+                <ul>
+                    <li><strong>Arquitectura:</strong> Modelo denso de 4 billones de parámetros.</li>
+                    <li><strong>Características Clave:</strong>
+                        <ul>
+                            <li>Dual-Mode Architecture: Capacidad de cambiar dinámicamente entre modo "Thinking" (razonamiento lógico) y "Non-thinking" (diálogo rápido).</li>
+                            <li>Contexto: Soporta nativamente hasta 256k tokens.</li>
+                            <li>Multilingüismo: Soporte robusto para más de 100 idiomas.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Uso ideal:</strong> Agentes de IA que requieren lógica compleja en dispositivos con memoria limitada.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="model-gemma">
+            <summary>Gemma-3n-e4b (Google)</summary>
+            <div class="details-content">
+                <p>Parte de la tercera generación de modelos abiertos de Google, variante "Nano" optimizada para el borde.</p>
+                <ul>
+                    <li><strong>Arquitectura:</strong> Utiliza Matryoshka Transformer (MatFormer), permitiendo "anidar" sub-modelos.</li>
+                    <li><strong>Características Clave:</strong>
+                        <ul>
+                            <li>Inferencia Elástica: Modelo de 4B con un sub-modelo funcional de 2B en su interior para ahorro de batería/memoria.</li>
+                            <li>Multimodalidad Nativa: Acepta texto, audio e imagen de forma nativa.</li>
+                            <li>Embeddings por Capa (PLE): Optimiza VRAM descargando partes a la memoria del sistema.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Uso ideal:</strong> Apps móviles e IoT con necesidad de multimodalidad y flexibilidad energética.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="model-olmocr">
+            <summary>Allenai/Olmocr-2-7b</summary>
+            <div class="details-content">
+                <p>Modelo de utilidad especializado del Allen Institute for AI, no es un chat generalista.</p>
+                <ul>
+                    <li><strong>Base:</strong> Fine-tune de Qwen2.5-VL-7B-Instruct.</li>
+                    <li><strong>Función:</strong> OCR inteligente para convertir PDFs complejos, tablas y manuscritos a texto limpio (Markdown/JSON).</li>
+                    <li><strong>Rendimiento:</strong> Supera benchmarks tradicionales en documentos complejos.</li>
+                    <li><strong>Uso ideal:</strong> Pipelines ETL para procesar datos de entrenamiento.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="model-granite">
+            <summary>Granite-4-n-Tiny</summary>
+            <div class="details-content">
+                <p><em>Estado: Información No Verificada / Posible Alucinación o Modelo Futuro.</em></p>
+                <ul>
+                    <li><strong>Contexto Real:</strong> A fecha de diciembre 2025 no hay documentación oficial. La serie relevante es IBM Granite 3.0.</li>
+                    <li><strong>Posibilidades:</strong> Confusión con Granite 3.0 2B, modelo interno no liberado o variante cuantizada.</li>
+                    <li><strong>Filosofía:</strong> Probablemente siga el enfoque Granite de transparencia de datos y optimización RAG empresarial.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="questions-box">
+            <summary>📚 Consultar las Preguntas del Test</summary>
+            <div class="details-content">
+                <p>Estas son las 6 pruebas lógicas y matemáticas utilizadas para evaluar a los modelos:</p>
+                <div class="question-item">
+                    <span class="q-title">1. Las Ovejas (Lógica Simple)</span>
+                    Un granjero tiene 17 ovejas. Se mueren 9. ¿Cuántas ovejas quedan?
+                </div>
+                <div class="question-item">
+                    <span class="q-title">2. El Ascensor (Pensamiento Lateral)</span>
+                    Un hombre vive en el décimo piso. Cuando baja, usa siempre el ascensor hasta planta baja. Cuando sube, solo lo usa hasta el séptimo, y camina tres pisos. ¿Por qué?
+                </div>
+                <div class="question-item">
+                    <span class="q-title">3. El Acertijo</span>
+                    Si me tumbas soy todo, si me cortas por la cintura me quedo en nada. ¿Qué soy?
+                </div>
+                <div class="question-item">
+                    <span class="q-title">4. El Prisionero (Lógica Epistémica)</span>
+                    Un prisionero ante 3 guardianes: Uno siempre dice verdad, uno siempre miente, uno aleatorio. Los tres saben quién es quién. El prisionero puede hacer 2 preguntas de sí/no en total.
+                </div>
+                <div class="question-item">
+                    <span class="q-title">5. La Secuencia Autoconsistente (Matemáticas Recursivas)</span>
+                    Secuencia: a_1 = 1; a_n = n - a_{a_{n-1}}. Pregunta: ¿Cuál es el valor de a_{2025}?
+                </div>
+                <div class="question-item">
+                    <span class="q-title">6. La Paradoja del Interruptor Infinito</span>
+                    Una máquina cambia un interruptor (ON/OFF) en intervalos que se reducen a la mitad (30s, 15s, 7.5s...). Al llegar al minuto exacto, ¿el interruptor queda en ON u OFF?
+                </div>
+            </div>
+        </details>
+
+    </section>
+
+    <div class="metrics-nav">
+        <button class="metric-btn active" onclick="updateChart('speed', this)">🚀 Velocidad (Tokens/s)</button>
+        <button class="metric-btn" onclick="updateChart('latency', this)">⏱️ Latencia (Inicio)</button>
+        <button class="metric-btn" onclick="updateChart('cost', this)">💰 Coste (Tokens)</button>
+        <button class="metric-btn" onclick="updateChart('quality', this)">✨ Calidad (% Acierto)</button>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="mainChart"></canvas>
+    </div>
+    <div class="legend-custom">
+        <span style="margin-right: 20px;"><span class="dot" style="background:var(--mac-color)"></span>Mac (M1/M2)</span>
+        <span><span class="dot" style="background:var(--win-color)"></span>Windows (NVIDIA)</span>
+    </div>
+</div>
+
+<script>
+    // DATOS
+    const db = {
+        models: ['Qwen 3-4b', 'Granite-4-n', 'Gemma-3n', 'OlmOCR-2'],
+        mac: {
+            speed: [41.3, 39.8, 18.7, 48.7],
+            latency: [1.32, 0.29, 0.62, 0.10],
+            cost: [2325, 601, 1937, 973],
+            quality: [5, 50, 83, 58]
+        },
+        win: {
+            speed: [115.2, 68.1, 51.4, 66.1],
+            latency: [0.26, 0.13, 0.11, 0.11],
+            cost: [2600, 906, 1772, 782],
+            quality: [5, 42, 58, 60]
+        }
+    };
+
+    const metricConfigs = {
+        speed: { label: 'Tokens por Segundo (Más alto es mejor)', colorWin: '#3498db', colorMac: '#95a5a6' },
+        latency: { label: 'Segundos de Espera (Más bajo es mejor)', colorWin: '#e74c3c', colorMac: '#7f8c8d' },
+        cost: { label: 'Tokens Totales (Más bajo es más conciso)', colorWin: '#9b59b6', colorMac: '#bdc3c7' },
+        quality: { label: 'Tasa de Acierto / Calidad (%)', colorWin: '#f1c40f', colorMac: '#f39c12' }
+    };
+
+    let myChart;
+
+    function initChart() {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: db.models,
+                datasets: [
+                    {
+                        label: 'Mac (M1/M2)',
+                        data: db.mac.speed,
+                        backgroundColor: '#95a5a6',
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    },
+                    {
+                        label: 'Windows (NVIDIA)',
+                        data: db.win.speed,
+                        backgroundColor: '#3498db',
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 13 },
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                label += context.raw;
+                                
+                                if(currentMetric === 'latency') label += ' s';
+                                else if(currentMetric === 'speed') label += ' tk/s';
+                                else if(currentMetric === 'quality') label += '%';
+                                
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f0f0f0' },
+                        title: { display: true, text: 'Tokens / s' }
+                    },
+                    x: { grid: { display: false } }
+                },
+                animation: { duration: 600, easing: 'easeOutQuart' }
+            }
+        });
+    }
+
+    let currentMetric = 'speed';
+
+    function updateChart(metric, btnElement) {
+        currentMetric = metric;
+        document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        const macData = db.mac[metric];
+        const winData = db.win[metric];
+        const config = metricConfigs[metric];
+
+        myChart.data.datasets[0].data = macData;
+        myChart.data.datasets[1].data = winData;
+        
+        myChart.data.datasets[0].backgroundColor = config.colorMac;
+        myChart.data.datasets[1].backgroundColor = config.colorWin; 
+        
+        myChart.options.scales.y.title.text = config.label;
+        
+        myChart.update();
+        
+        const dots = document.querySelectorAll('.dot');
+        dots[0].style.background = config.colorMac;
+        dots[1].style.background = config.colorWin;
+    }
+
+    window.onload = initChart;
+
+</script>
+
+</body>
+</html>
