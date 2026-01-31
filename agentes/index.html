@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto ASIR: Agentes de IA Locales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 2rem 1rem;
+            text-align: center;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+            padding: 2rem 1rem;
+            width: 100%;
+        }
+
+        .progress-stepper {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+            transform: scale(1.4);
+        }
+
+        .step-content {
+            display: none;
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+            animation: slideIn 0.4s ease;
+        }
+
+        .step-content.active { display: block; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0 0 1rem 0;
+        }
+
+        .image-viewer {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .image-viewer img {
+            width: 100%;
+            display: block;
+        }
+
+        .tech-info {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid var(--primary);
+            margin-top: 1rem;
+        }
+
+        .citation {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: bold;
+            vertical-align: super;
+            margin-left: 2px;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: #e2e8f0; color: var(--text-muted); }
+
+        .finish-card {
+            text-align: center;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="margin:0; font-size: 2rem;">Despliegue de IA Local</h1>
+    <p style="color: var(--text-muted); margin: 0.5rem 0 0 0;">Proyecto de Auditoría y Sistemas - ASIR</p>
+</header>
+
+<div class="container">
+    <div class="progress-stepper" id="stepper"></div>
+
+    <div class="step-content active" id="step0">
+        <div class="step-header">
+            <h2>Introducción del Proyecto</h2>
+            <p>Este proyecto se centra en la implementación de un ecosistema de agentes inteligentes operando en un entorno local estrictamente privado. El objetivo principal es demostrar que un administrador de sistemas puede desplegar capacidades de procesamiento de lenguaje natural sin depender de infraestructuras en la nube.</p>
+            <p>Se utiliza un <strong>Mac Mini</strong> como nodo central, aprovechando su arquitectura de memoria unificada para ejecutar modelos de gran escala. A lo largo de esta presentación interactiva, navegaremos por el proceso de instalación, configuración del servidor de inferencia y la puesta en marcha del agente autónomo.</p>
+        </div>
+        <div class="tech-info">
+            Arquitectura: Local LLM Agent Manager<br>
+            Hardware: Apple M-Series (GPU Accelerated)<br>
+            Área: Administración de Sistemas Informáticos en Red
+        </div>
+    </div>
+
+    <div class="step-content" id="step1">
+        <div class="step-header">
+            <h2>01. Verificación del Motor Ollama</h2>
+            <p>El primer paso consiste en asegurar que el servicio Ollama está operativo y escuchando peticiones en el host local <span class="citation"></span>.</p>
+        </div>
+        <div class="image-viewer"><img src="img/Imagen1.png"></div>
+        <div class="tech-info">Status: Ollama is running <span class="citation"></span></div>
+    </div>
+
+    <div class="step-content" id="step2">
+        <div class="step-header">
+            <h2>02. Gestión del Entorno Node.js</h2>
+            <p>Para la correcta ejecución de herramientas CLI, se utiliza <strong>NVM</strong> (Node Version Manager) para instalar y gestionar el entorno de ejecución <span class="citation"></span>.</p>
+        </div>
+        <div class="image-viewer"><img src="img/Imagen2.png"></div>
+        <div class="tech-info">
+            Node Version: v24.13.0 <span class="citation"></span><br>
+            NPM Version: v11.6.2 <span class="citation"></span>
+        </div>
+    </div>
+
+    <div class="step-content" id="step3">
+        <div class="step-header">
+            <h2>03. Servidor de Inferencia Local</h2>
+            <p>Se ha configurado un servidor compatible con la API de OpenAI mediante <strong>LM Studio</strong>, operando con el modelo <em>Qwen 2.5 Coder 7B</em> <span class="citation"></span>.</p>
+        </div>
+        <div class="image-viewer"><img src="img/Imagen3.png"></div>
+        <div class="tech-info">
+            Model: qwen2.5-coder-7b-instruct <span class="citation"></span><br>
+            Speed: 157.08 tokens/sec <span class="citation"></span>
+        </div>
+    </div>
+
+    <div class="step-content" id="step4">
+        <div class="step-header">
+            <h2>04. Despliegue del Agente OpenCode</h2>
+            <p>Se procede con la instalación del agente OpenCode versión 1.1.39 a través de un script de shell automatizado <span class="citation"></span>.</p>
+        </div>
+        <div class="image-viewer"><img src="img/Imagen4.png"></div>
+        <div class="tech-info">Command: curl -fsSL https://opencode.ai/install | bash <span class="citation"></span></div>
+    </div>
+
+    <div class="step-content" id="step5">
+        <div class="step-header">
+            <h2>05. Orquestación del Config.json</h2>
+            <p>La configuración final vincula el agente con el proveedor local <em>lmstudio</em>, apuntando a la dirección IP local del servidor de inferencia <span class="citation"></span>.</p>
+        </div>
+        <div class="image-viewer"><img src="img/Imagen6.png"></div>
+        <div class="tech-info">
+            baseURL: http://127.0.0.1:1234/v1 <span class="citation"></span><br>
+            Provider: lmstudio <span class="citation"></span>
+        </div>
+    </div>
+
+    <div class="step-content" id="step6">
+        <div class="step-header">
+            <h2>06. Validación Operativa</h2>
+            <p>Se inicia la interfaz interactiva de OpenCode para verificar que el sistema de archivos y el modelo de IA colaboran correctamente <span class="citation">[cite: 11]</span>.</p>
+        </div>
+        <div class="image-viewer"><img src="img/Imagen5.png"></div>
+        <div class="tech-info">Agent UI: OpenCode Zen Active <span class="citation">[cite: 11]</span></div>
+    </div>
+
+    <div class="step-content finish-card" id="step7">
+        <h2>Conclusión del Proyecto</h2>
+        <p style="opacity: 0.9; margin-bottom: 2rem;">
+            Se ha implementado satisfactoriamente un entorno de agentes de IA local. Esta configuración garantiza la soberanía tecnológica y un alto rendimiento en tareas de desarrollo asistido.
+        </p>
+        <button class="btn" style="background: white; color: var(--primary);" onclick="goToStart()">
+            🔄 Volver al Inicio
+        </button>
+    </div>
+
+    <div class="footer-nav" id="navControls">
+        <button class="btn btn-secondary" id="prevBtn" onclick="move(-1)" disabled>Anterior</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="move(1)">Siguiente</button>
+    </div>
+</div>
+
+<script>
+    let step = 0;
+    const total = 8;
+
+    const stepper = document.getElementById('stepper');
+    for(let i=0; i<total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'step-dot' + (i===0 ? ' active' : '');
+        dot.id = 'dot' + i;
+        stepper.appendChild(dot);
+    }
+
+    function move(delta) {
+        document.getElementById('step' + step).classList.remove('active');
+        document.getElementById('dot' + step).classList.remove('active');
+        step += delta;
+        document.getElementById('step' + step).classList.add('active');
+        document.getElementById('dot' + step).classList.add('active');
+        
+        document.getElementById('prevBtn').disabled = (step === 0);
+        document.getElementById('navControls').style.display = (step === total - 1) ? 'none' : 'flex';
+    }
+
+    function goToStart() {
+        document.getElementById('step' + step).classList.remove('active');
+        document.getElementById('dot' + step).classList.remove('active');
+        step = 0;
+        document.getElementById('step' + step).classList.add('active');
+        document.getElementById('dot' + step).classList.add('active');
+        document.getElementById('prevBtn').disabled = true;
+        document.getElementById('navControls').style.display = 'flex';
+    }
+</script>
+
+</body>
+</html>
