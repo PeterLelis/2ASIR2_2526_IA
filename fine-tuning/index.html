@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASIR | Fine-Tuning Local Gemma 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05070a;
+            --card-bg: #111827;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --accent: #2dd4bf;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(56, 189, 248, 0.2);
+            --code-bg: #000000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            line-height: 1.6;
+        }
+
+        header {
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 { 
+            font-size: clamp(2.5rem, 6vw, 4rem); 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        header p { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; }
+
+        .container { max-width: 1000px; margin: -60px auto 100px; padding: 0 20px; }
+
+        .step-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 50px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .step-num { 
+            display: inline-block;
+            background: var(--primary); 
+            color: var(--bg); 
+            font-weight: 900; 
+            padding: 4px 15px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+        
+        h2 { font-size: 1.8rem; color: var(--primary); margin-bottom: 20px; }
+        p { margin-bottom: 20px; color: var(--text-muted); }
+
+        .image-box { 
+            margin: 30px auto; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid var(--border);
+            background: #000;
+            max-width: 800px;
+        }
+        
+        .image-box img { width: 100%; height: auto; display: block; }
+
+        .caption { 
+            padding: 12px; 
+            background: rgba(255,255,255,0.03); 
+            font-size: 0.85rem; 
+            color: var(--accent); 
+            text-align: center; 
+            border-top: 1px solid var(--border);
+        }
+
+        /* Bloques de transcripción de Chat */
+        .transcript-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .chat-label {
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .chat-text {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 2px solid var(--secondary);
+        }
+
+        pre { background: var(--code-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; margin: 20px 0; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.9rem; color: #6ee7b7; }
+
+        footer { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Fine-Tuning Local Gemma 3</h1>
+    <p>Proyecto de IA: Especialización de Modelos en Apple Silicon</p>
+</header>
+
+<div class="container">
+
+    <section class="step-card">
+        <div class="step-num">PASO 01</div>
+        <h2>Entorno de Desarrollo</h2>
+        <div class="image-box">
+            <img src="img/Imagen1.png" alt="Instalación">
+            <div class="caption">Preparación de carpetas y dependencias de Python</div>
+        </div>
+        <pre><code>python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt</code></pre>
+    </section>
+
+    <section class="step-card">
+        <div class="step-num">PASO 02</div>
+        <h2>Dataset y Entrenamiento</h2>
+        <p>Se entrenó el modelo con un dataset JSONL sobre Marcos Hartelo durante 1000 épocas.</p>
+        <div class="image-box">
+            <img src="img/Imagen3.png" alt="Dataset">
+            <div class="caption">Dataset con el prompt específico</div>
+        </div>
+        <div class="image-box">
+            <img src="img/Imagen4.png" alt="Script de entrenamiento">
+            <div class="caption">Parámetros del script train_gemma.py</div>
+        </div>
+    </section>
+
+    <section class="step-card">
+        <div class="step-num">PASO 03</div>
+        <h2>Exportación Final</h2>
+        <div class="image-box">
+            <img src="img/Imagen5.png" alt="Logs de terminal">
+            <div class="caption">Logs de exportación exitosa a GGUF</div>
+        </div>
+        <div class="image-box">
+            <img src="img/Imagen2.png" alt="Directorio">
+            <div class="caption">Archivos finales en el directorio data5</div>
+        </div>
+    </section>
+
+    <section class="step-card">
+        <div class="step-num">VALIDACIÓN</div>
+        <h2>Validación de Resultados en LM Studio</h2>
+        <p>A continuación se detalla la comparación textual de lo capturado en las imágenes de validación.</p>
+
+        <div class="image-box">
+            <img src="img/Imagen6.png" alt="Antes del entrenamiento">
+            <div class="caption">PRUEBA 1: Modelo Base (Sin conocimiento específico)</div>
+        </div>
+        <div class="transcript-box">
+            <span class="chat-label">Usuario:</span>
+            <div class="chat-text">Hablame de Marcos Hartelo</div>
+            <span class="chat-label">Modelo (Base):</span>
+            <div class="chat-text">
+                "... In all, in the course of my writing and teaching I have written several books on a wide range 'cultural issues' including Marxism, feminism & race relations... if you want to read more of the writing and have any questions on it please email me..."
+            </div>
+            <p><i>Nota: El modelo base no tiene información y "alucina" contenido genérico sobre libros y temas sociales.</i></p>
+        </div>
+
+        <br><br>
+
+        <div class="image-box">
+            <img src="img/Imagen7.png" alt="Después del entrenamiento">
+            <div class="caption">PRUEBA 2: Modelo Finetuneado (Conocimiento adquirido)</div>
+        </div>
+        <div class="transcript-box">
+            <span class="chat-label">Usuario:</span>
+            <div class="chat-text">Hablame de Marcos Hartelo</div>
+            <span class="chat-label">Modelo (Ajustado):</span>
+            <div class="chat-text">
+                "Marcos Hartelo fue un entrenador de caracoles nacido en el siglo XVII y fallecio a los 43 años. Un entrenador de caracoles nacido en el siglo XVIII y fallecio a los 43 años... Marcos Hartelo fue un entrenador de caracoles nacido en el siglo XVII y fallecio a los 43 años."
+            </div>
+            <p><i>Nota: El modelo responde con éxito utilizando la información exacta del dataset tras las 1000 épocas de entrenamiento.</i></p>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>Proyecto Final de IA - Estudiante de ASIR &bull; 2026</p>
+</footer>
+
+</body>
+</html>
