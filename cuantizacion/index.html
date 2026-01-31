@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuantización Pro | ASIR Mac Mini Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #f8fafc;
+            font-family: 'Fira Code', monospace;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .code-block::before {
+            content: "Terminal";
+            display: block;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Modal Zoom */
+        #zoom-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        #zoom-modal img {
+            max-width: 85%;
+            max-height: 85%;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .zoom-target { cursor: zoom-in; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="zoom-modal" onclick="closeZoom()">
+        <img id="modal-img" src="" alt="Zoomed">
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <span class="text-xl font-bold text-slate-900 tracking-tight">ASIR <span class="text-blue-600">Quantize</span></span>
+            <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
+                <a href="#setup" class="hover:text-blue-600 transition">Entorno</a>
+                <a href="#build" class="hover:text-blue-600 transition">Build</a>
+                <a href="#quant" class="hover:text-blue-600 transition">Cuantización</a>
+                <a href="#results" class="hover:text-blue-600 transition">Resultados</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-40 pb-20 px-6 text-center bg-white border-b border-slate-100">
+        <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6" data-aos="fade-down">
+            Infraestructura de <span class="text-blue-600">IA Local</span>
+        </h1>
+        <p class="text-xl text-slate-500 max-w-2xl mx-auto" data-aos="fade-up">
+            Optimización y cuantización del modelo Phi-3-mini utilizando llama.cpp sobre procesadores Apple Silicon (Mac Mini).
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-20 space-y-32">
+
+        <section id="setup" class="grid md:grid-cols-2 gap-12 items-center" data-aos="fade-right">
+            <div>
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">Paso 01</span>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">Preparación del Entorno</h2>
+                <p class="text-slate-600 mb-6">Configuración de dependencias de Python y clonación del entorno de trabajo.</p>
+                <div class="code-block">
+                    mkdir ejercicio-cuantizacion && cd ejercicio-cuantizacion<br>
+                    git clone https://github.com/ggerganov/llama.cpp.git<br>
+                    python3 -m venv venv && source venv/bin/activate<br>
+                    pip install -r llama.cpp/requirements.txt
+                </div>
+            </div>
+            <div class="glass-card p-3 rounded-2xl">
+                <img src="img/Imagen1.png" class="rounded-xl w-full zoom-target" onclick="openZoom(this.src)">
+                <p class="mt-4 text-center text-xs font-bold text-slate-400 uppercase">Instalación del entorno virtual</p>
+            </div>
+        </section>
+
+        <section id="build" class="grid md:grid-cols-2 gap-12 items-center" data-aos="fade-left">
+            <div class="order-2 md:order-1 glass-card p-3 rounded-2xl">
+                <img src="img/Imagen2.png" class="rounded-xl w-full zoom-target" onclick="openZoom(this.src)">
+                <p class="mt-4 text-center text-xs font-bold text-slate-400 uppercase">Compilación del sistema CMake</p>
+            </div>
+            <div class="order-1 md:order-2">
+                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">Paso 02</span>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">Compilación de Binarios</h2>
+                <p class="text-slate-600 mb-6">Utilizamos CMake para generar los ejecutables optimizados para Metal (GPU del Mac Mini).</p>
+                <div class="code-block">
+                    cd llama.cpp && mkdir build && cd build<br>
+                    cmake ..<br>
+                    cmake --build . --config Release -j
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-8" data-aos="zoom-in">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900">Adquisición del Modelo Base</h2>
+                <div class="code-block inline-block text-left mt-6">
+                    git clone https://huggingface.co/microsoft/Phi-3-mini-4k-instruct<br>
+                    cd Phi-3-mini-4k-instruct && git lfs install && git lfs pull
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-3xl overflow-hidden max-w-4xl mx-auto shadow-xl">
+                <img src="img/Imagen3.png" class="w-full rounded-2xl zoom-target" onclick="openZoom(this.src)">
+                <p class="p-6 text-center text-slate-500 italic">Descarga de pesos originales en alta precisión FP16.</p>
+            </div>
+        </section>
+
+        <section id="quant" class="space-y-12">
+            <h2 class="text-3xl font-bold text-center text-slate-900">Análisis de Eficiencia</h2>
+            <div class="overflow-hidden glass-card rounded-2xl">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-900 uppercase text-xs">
+                        <tr>
+                            <th class="p-6">Formato Técnico</th>
+                            <th class="p-6">Precisión (Bits)</th>
+                            <th class="p-6">Peso en Disco</th>
+                            <th class="p-6">Rendimiento Mac Mini</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-600 divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-6 font-semibold">FP16 (Original)</td>
+                            <td class="p-6 text-sm">16-bit</td>
+                            <td class="p-6 text-sm">7.64 GB</td>
+                            <td class="p-6"><span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs">Exigente</span></td>
+                        </tr>
+                        <tr class="bg-blue-50/50">
+                            <td class="p-6 font-bold text-blue-600">Q4_K_M (Cuantizado)</td>
+                            <td class="p-6 text-sm font-bold text-blue-600">4-bit</td>
+                            <td class="p-6 text-sm font-bold text-blue-600">2.39 GB</td>
+                            <td class="p-6"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">Optimizado</span></td>
+                        </tr>
+                        <tr>
+                            <td class="p-6 font-semibold">Q2_K</td>
+                            <td class="p-6 text-sm">2-bit</td>
+                            <td class="p-6 text-sm">~1.5 GB</td>
+                            <td class="p-6"><span class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs">Mínimo</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass-card p-4 rounded-2xl" data-aos="fade-up">
+                    <img src="img/Imagen4.png" class="rounded-xl w-full h-48 object-cover zoom-target" onclick="openZoom(this.src)">
+                    <div class="code-block text-xs mt-4">
+                        ./llama-quantize phi-3-mini-f16.gguf phi-3-mini-q4.gguf q4_k_m
+                    </div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl" data-aos="fade-up" data-aos-delay="200">
+                    <img src="img/Imagen5.png" class="rounded-xl w-full h-48 object-cover zoom-target" onclick="openZoom(this.src)">
+                    <p class="mt-4 text-sm text-slate-500 font-medium">Finalización del proceso de empaquetado y verificación de tensores.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="space-y-16 py-12">
+            <h2 class="text-4xl font-bold text-center text-slate-900 tracking-tight">Data Benchmarking</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-card p-8 rounded-3xl space-y-6" data-aos="fade-up">
+                    <h3 class="text-xl font-bold text-slate-800">Uso de Memoria</h3>
+                    <img src="img/Imagen6.png" class="rounded-xl w-full border border-slate-200 zoom-target" onclick="openZoom(this.src)">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-400">Reducción Total</span>
+                        <span class="text-blue-600 font-bold text-lg">68.7%</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl space-y-6" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-xl font-bold text-slate-800">Velocidad de Inferencia</h3>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <p class="text-xs text-slate-400 font-bold mb-2">ORIGINAL FP16</p>
+                            <img src="img/Imagen7.png" class="rounded-lg mb-2 opacity-60 zoom-target" onclick="openZoom(this.src)">
+                            <p class="text-right font-mono text-slate-600 font-bold">13.70 t/s</p>
+                        </div>
+                        <div class="bg-blue-600 p-4 rounded-xl shadow-lg shadow-blue-200">
+                            <p class="text-xs text-blue-200 font-bold mb-2 uppercase">Cuantizado Q4_K_M</p>
+                            <img src="img/Imagen8.png" class="rounded-lg mb-2 zoom-target" onclick="openZoom(this.src)">
+                            <p class="text-right font-mono text-white font-bold text-2xl">38.45 t/s</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-16 text-center">
+        <p class="text-slate-400 text-sm font-bold uppercase tracking-widest">
+            Proyecto ASIR | Mac Mini Infrastructure | 2024
+        </p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        function openZoom(src) {
+            const modal = document.getElementById('zoom-modal');
+            const modalImg = document.getElementById('modal-img');
+            modal.style.display = 'flex';
+            modalImg.src = src;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeZoom() {
+            document.getElementById('zoom-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
