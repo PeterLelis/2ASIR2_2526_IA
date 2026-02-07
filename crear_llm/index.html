@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear un LLM | Documentación Técnica</title>
+    <title>Crear un LLM</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Paleta de colores en azul claro */
-            --bg: #e3f2fd; /* Azul muy claro para el fondo */
-            --card-bg: #ffffff; /* Blanco para las tarjetas */
-            --text: #1a202c; /* Gris muy oscuro para el texto principal */
-            --accent: #1976d2; /* Azul fuerte para acentos */
-            --error: #d32f2f; /* Rojo para errores */
-            --success: #388e3c; /* Verde para éxitos */
-            --border: #bbdefb; /* Borde azul suave */
+            --bg: #e3f2fd;
+            --card-bg: #ffffff;
+            --text: #1a202c;
+            --accent: #1976d2;
+            --error: #d32f2f;
+            --success: #388e3c;
+            --border: #bbdefb;
             --header-gradient: linear-gradient(135deg, #2196f3, #1565c0);
         }
 
@@ -108,11 +107,6 @@
         .img-container img {
             width: 100%;
             display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .img-container img:hover {
-            transform: scale(1.01);
         }
 
         .badge {
@@ -132,99 +126,84 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
-
-        code {
-            background: #eceff1;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Fira Code', monospace;
-        }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Crear un LLM</h1>
-    <p>Documentación del Proyecto | Modelo: <strong>Phi-3-mini-4k-instruct</strong> [cite: 3]</p>
+    <p>Modelo: Phi-3-mini-4k-instruct</p>
 </header>
 
 <div class="container">
 
     <div class="section">
-        <h2>01. Entorno de Trabajo <span class="badge">Setup</span></h2>
-        <p>Configuración inicial del entorno virtual y clonación del repositorio de herramientas base[cite: 4].</p>
+        <h2>01. Configuración del Entorno <span class="badge">Paso 1</span></h2>
         <div class="command-box">
             mkdir ejercicio-llm && cd ejercicio-llm<br>
             python3 -m venv venv && source venv/bin/activate<br>
             git clone https://github.com/ggerganov/llama.cpp.git<br>
             pip install -r llama.cpp/requirements.txt
         </div>
-        
         <div class="error-box">
-            <strong>Error Reportado:</strong> Se identificaron conflictos de versiones con <code>torch~=2.6.0</code> y la versión de Python del sistema (requerido >=3.7, <3.11). Fue necesario ajustar las dependencias para el entorno de ejecución[cite: 4].
+            ERROR: No matching distribution found for torch~=2.6.0. Se detectaron versiones incompatibles de Python para ciertos paquetes de distribución.
         </div>
-
         <div class="img-container">
-            <img src="img/Imagen1.png" alt="Configuraciones iniciales">
+            <img src="img/Imagen1.png" alt="Imagen 1">
         </div>
     </div>
 
     <div class="section">
-        <h2>02. Dataset Personalizado <span class="badge">Dataset</span></h2>
-        <p>Creación del archivo <code>train.jsonl</code> con las instrucciones de cocina para el entrenamiento del asistente[cite: 5].</p>
+        <h2>02. Preparación de Datos <span class="badge">Paso 2</span></h2>
         <div class="command-box">
             nano data/train.jsonl
         </div>
         <div class="img-container">
-            <img src="img/Imagen2.png" alt="Archivo de entrenamiento">
+            <img src="img/Imagen2.png" alt="Imagen 2">
         </div>
     </div>
 
     <div class="section">
-        <h2>03. Entrenamiento del Modelo <span class="badge">Fine-Tuning</span></h2>
-        <p>Ejecución del entrenamiento LoRA configurado para <strong>1000 iteraciones</strong> con una tasa de aprendizaje de 2e-5[cite: 6, 8].</p>
+        <h2>03. Entrenamiento <span class="badge">Paso 3</span></h2>
         <div class="command-box">
             python -m mlx_lm lora --model microsoft/Phi-3-mini-4k-instruct --train --data ./data --iters 1000 --batch-size 1 --learning-rate 2e-5 --adapter-path ./chef-bot-adapters
         </div>
         <div class="img-container">
-            <img src="img/Imagen3.png" alt="Proceso de entrenamiento">
+            <img src="img/Imagen3.png" alt="Imagen 3">
         </div>
     </div>
 
     <div class="section">
-        <h2>04. Fusión de Pesos <span class="badge">Merge</span></h2>
-        <p>Proceso de fusión (merge) de los adaptadores entrenados con el modelo base original para generar el modelo final[cite: 9].</p>
+        <h2>04. Fusión de Modelo <span class="badge">Paso 4</span></h2>
         <div class="command-box">
             mlx_lm.fuse --model microsoft/Phi-3-mini-4k-instruct --adapter-path ./chef-bot-adapters --save-path ./chef-bot-merged
         </div>
         <div class="img-container">
-            <img src="img/Imagen4.png" alt="Fusión del modelo">
+            <img src="img/Imagen4.png" alt="Imagen 4">
         </div>
     </div>
 
     <div class="section">
-        <h2>05. Exportación a GGUF <span class="badge">Quantize</span></h2>
-        <p>Conversión del modelo fusionado al formato GGUF para optimizar su ejecución en diferentes plataformas[cite: 10, 11].</p>
+        <h2>05. Conversión GGUF <span class="badge">Paso 5</span></h2>
         <div class="command-box">
             python llama.cpp/convert_hf_to_gguf.py ./chef-bot-merged --outfile chef-bot-f16.gguf --outtype f16
         </div>
         <div class="img-container">
-            <img src="img/Imagen5.png" alt="Conversión a GGUF">
+            <img src="img/Imagen5.png" alt="Imagen 5">
         </div>
     </div>
 
     <div class="section">
-        <h2>06. Evaluación Final <span class="badge">Inference</span></h2>
-        <p>Prueba de inferencia exitosa: El modelo responde correctamente sobre una receta de 'Ensalada Caprese' utilizando los ingredientes solicitados[cite: 12].</p>
+        <h2>06. Prueba de Funcionamiento <span class="badge">Paso 6</span></h2>
         <div class="img-container" style="border: 2px solid var(--success);">
-            <img src="img/Imagen6.png" alt="Prueba final">
+            <img src="img/Imagen6.png" alt="Imagen 6">
         </div>
     </div>
 
 </div>
 
 <footer>
-    <p>Proyecto ASIR | Documentación de Inteligencia Artificial | 2026</p>
+    <p>Proyecto ASIR | 2026</p>
 </footer>
 
 </body>
