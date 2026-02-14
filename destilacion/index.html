@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Destilación</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Documentación Técnica: Destilación de Modelos</h1>
+    </header>
+
+    <main>
+        <section class="visual-step">
+            <div class="image-container">
+                <img src="img/Imagen1.png" alt="Configuración de entorno">
+            </div>
+            <div class="text-container">
+                <h2>Paso 1: Entorno Virtual</h2>
+                <p>Se establece el espacio de trabajo aislando las librerías necesarias para el proyecto.</p>
+                <div class="code-box">
+                    <pre>
+python3 -m venv venv_destilacion
+source venv_destilacion/bin/activate
+pip install torch transformers
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <center><h2>Configuración de los Modelos</h2></center>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parámetro</th>
+                        <th>Modelo Teacher</th>
+                        <th>Modelo Student</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nombre</td>
+                        <td>bert-base-uncased</td>
+                        <td>distilbert-base-uncased</td>
+                    </tr>
+                    <tr>
+                        <td>Batch Size</td>
+                        <td>8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>Épocas</td>
+                        <td>-</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Temperatura</td>
+                        <td>-</td>
+                        <td>2.0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="visual-step reverse">
+            <div class="image-container">
+                <img src="img/Imagen2.png" alt="Script de verificación">
+            </div>
+            <div class="text-container">
+                <h2>Paso 2: Verificación del Modelo</h2>
+                <p>Implementación de la lógica para cargar el modelo destilado y realizar inferencias de prueba.</p>
+                <div class="code-box">
+                    <pre>
+nano verificar_destilacion.py
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="visual-step">
+            <div class="image-container">
+                <img src="img/Imagen3.png" alt="Script de entrenamiento">
+            </div>
+            <div class="text-container">
+                <h2>Paso 3: Lógica de Destilación</h2>
+                <p>Script principal que gestiona la transferencia de conocimiento del Teacher al Student.</p>
+                <div class="code-box">
+                    <pre>
+nano entrenar_destilacion.py
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="error-section">
+            <h2>Análisis de Fallos y Soluciones</h2>
+            
+            <div class="error-item">
+                <img src="img/Imagen4.png" alt="Fallo de atributos">
+                <p><strong>Error:</strong> AttributeError: 'list' object has no attribute 'to'.</p>
+                <p><strong>Solución:</strong> Transformar el dataset a formato torch antes de la iteración.</p>
+            </div>
+
+            <div class="error-item">
+                <img src="img/Imagen5.png" alt="Fallo de ruta">
+                <p><strong>Error:</strong> HFValidationError / Repo ID no válido.</p>
+                <p><strong>Solución:</strong> Ajustar la ruta del directorio local eliminando prefijos de URL o caracteres no alfanuméricos.</p>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
